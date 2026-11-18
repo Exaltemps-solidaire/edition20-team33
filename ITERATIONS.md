@@ -243,6 +243,26 @@
     - `frontend/src/app/ressources.ts` : fonction `normaliser` (suppression des accents via NFD) appliquée au texte tapé et aux mots-clés avant comparaison.
     - `frontend/src/app/ressources.test.ts` : 1 test sur deux formulations sans accent.
 
+## Itération 10 : la saisie libre tolère les fautes de frappe sur un mot-clé
+
+- **Plan validé le 2026-11-18**, demande directe du développeur après l'itération 9 (accents).
+- **Dans le périmètre** : distance de Levenshtein mot à mot, tolérance selon la longueur du mot-clé (0 si ≤4 lettres pour éviter les faux positifs, 1 si 5-7, 2 au-delà), uniquement pour les mots-clés d'un seul mot. Les mots-clés à plusieurs mots (« arrêt de travail », « rendez-vous ») gardent la correspondance par sous-chaîne existante.
+- **Hors périmètre** : fautes multiples sur un mot-clé court (« ald », « rdv »), correction orthographique générale, fautes sur plusieurs mots d'une expression composée.
+- **Critères d'acceptation** :
+  - Étant donné « diagnotic » tapé à la place de « diagnostic » (une lettre manquante), quand on l'envoie, alors la réponse montre l'extrait thématique diagnostic (pas la réponse par défaut).
+  - Étant donné une question hors sujet sans rapport avec aucun mot-clé, quand on l'envoie, alors la réponse par défaut + alerte s'affichent toujours (pas de faux positif introduit par la tolérance).
+- **Codage estimé** : quelques minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/ressources.test.ts`.
+- **Tests unitaires prévus** : 2, un par critère d'acceptation.
+- **Bilan** :
+  - Durée de codage réelle : 32 secondes.
+  - Critères d'acceptation : les 2 satisfaits — « diagnotic » (faute de frappe) route vers l'extrait thématique diagnostic ; une question vraiment hors sujet (« vendez-vous des billets de train ») déclenche toujours la réponse par défaut + alerte, pas de faux positif introduit. Couverts par 2 tests Vitest.
+  - Reporté : rien de nouveau ; les limites annoncées (mots-clés courts, expressions composées) restent hors périmètre.
+  - Harnais : aucun blocage — `npm test` au vert (20 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 10` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : `distanceLevenshtein` et `motCleApproche`, tolérance aux fautes de frappe selon la longueur du mot-clé, appliquée en complément de la correspondance par sous-chaîne.
+    - `frontend/src/app/ressources.test.ts` : 2 tests (faute de frappe tolérée, pas de faux positif).
+
 ## À venir
 
 _Rien d'autre après cette itération, sauf retour du développeur._

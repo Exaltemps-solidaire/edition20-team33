@@ -167,9 +167,39 @@ function normaliser(texte: string): string {
     .toLowerCase();
 }
 
+function distanceLevenshtein(a: string, b: string): number {
+  const distances: number[][] = Array.from({ length: a.length + 1 }, () => new Array(b.length + 1).fill(0));
+  for (let i = 0; i <= a.length; i++) distances[i][0] = i;
+  for (let j = 0; j <= b.length; j++) distances[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      const cout = a[i - 1] === b[j - 1] ? 0 : 1;
+      distances[i][j] = Math.min(distances[i - 1][j] + 1, distances[i][j - 1] + 1, distances[i - 1][j - 1] + cout);
+    }
+  }
+  return distances[a.length][b.length];
+}
+
+function toleranceFauteDeFrappe(motCle: string): number {
+  if (motCle.length <= 4) return 0;
+  if (motCle.length <= 7) return 1;
+  return 2;
+}
+
+function motCleApproche(mots: string[], motCle: string): boolean {
+  if (motCle.includes(" ") || motCle.includes("-")) return false;
+  const tolerance = toleranceFauteDeFrappe(motCle);
+  if (tolerance === 0) return false;
+  return mots.some((mot) => distanceLevenshtein(mot, motCle) <= tolerance);
+}
+
 export function resoudreTexteLibre(texte: string): ReponseSuggestion {
   const texteNormalise = normaliser(texte);
-  const correspondance = MOTS_CLES.find(({ motCle }) => texteNormalise.includes(normaliser(motCle)));
+  const mots = texteNormalise.split(/[^a-z0-9]+/).filter(Boolean);
+  const correspondance = MOTS_CLES.find(({ motCle }) => {
+    const motCleNormalise = normaliser(motCle);
+    return texteNormalise.includes(motCleNormalise) || motCleApproche(mots, motCleNormalise);
+  });
   if (!correspondance) return REPONSE_PAR_DEFAUT;
   return resoudreSuggestion(correspondance.id, correspondance.themeGuide);
 }

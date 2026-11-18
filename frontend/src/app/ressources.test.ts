@@ -85,6 +85,17 @@ describe("resoudreTexteLibre", () => {
       "Carte des filières de soins par région",
     ]);
   });
+
+  it("tolère une faute de frappe sur un mot-clé", () => {
+    const reponse = resoudreTexteLibre("jai eu mon diagnotic recemment");
+    expect(reponse.ressources[0]?.titre).toBe("Les premiers jours après le diagnostic");
+  });
+
+  it("ne déclenche pas de faux positif sur une question vraiment hors sujet", () => {
+    const reponse = resoudreTexteLibre("Bonjour, est-ce que vous vendez des billets de train");
+    expect(reponse.ressources).toHaveLength(0);
+    expect(reponse.alerte).toBe(true);
+  });
 });
 
 describe("personnaliserRegion", () => {
