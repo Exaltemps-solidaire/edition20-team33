@@ -124,5 +124,7 @@
 
 ## À venir
 
-1. Sélecteur de région (filière de soins régionale).
-2. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
+⚠️ Ordre proposé à valider par les cadreurs : le temps restant s'annonce très court depuis l'itération 3 (15 min annoncées, consommées en grande partie par publication/déploiement à chaque itération). Si une seule itération reste possible, je recommande l'alerte automatique avant le sélecteur de région, car elle seule couvre l'hypothèse mesurée de l'équipe (cible 100 %) — le sélecteur de région est une amélioration d'ergonomie, pas la mesure attendue par le pitch.
+
+1. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
+2. Sélecteur de région (filière de soins régionale).
