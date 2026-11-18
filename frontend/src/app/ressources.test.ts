@@ -76,6 +76,15 @@ describe("resoudreTexteLibre", () => {
       "Groupes de parole et cafés patientes",
     ]);
   });
+
+  it("ignore les accents manquants dans la question tapée", () => {
+    const reponse = resoudreTexteLibre("quels sont les symptomes");
+    expect(reponse.ressources[0]?.titre).toBe("Les premiers jours après le diagnostic");
+
+    expect(resoudreTexteLibre("je cherche un medecin").ressources.map((r) => r.titre)).toEqual([
+      "Carte des filières de soins par région",
+    ]);
+  });
 });
 
 describe("personnaliserRegion", () => {

@@ -160,9 +160,16 @@ const MOTS_CLES: { motCle: string; id: string; themeGuide?: string }[] = [
   { motCle: "rencontre", id: "groupes" },
 ];
 
+function normaliser(texte: string): string {
+  return texte
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
+}
+
 export function resoudreTexteLibre(texte: string): ReponseSuggestion {
-  const texteNormalise = texte.toLowerCase();
-  const correspondance = MOTS_CLES.find(({ motCle }) => texteNormalise.includes(motCle));
+  const texteNormalise = normaliser(texte);
+  const correspondance = MOTS_CLES.find(({ motCle }) => texteNormalise.includes(normaliser(motCle)));
   if (!correspondance) return REPONSE_PAR_DEFAUT;
   return resoudreSuggestion(correspondance.id, correspondance.themeGuide);
 }

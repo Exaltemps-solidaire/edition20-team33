@@ -223,6 +223,26 @@
     - `frontend/src/app/ressources.ts` : `MOTS_CLES` élargi avec des synonymes et formulations courantes pour les 4 catégories (droits, médecins, guide/diagnostic, guide/traitement, groupes).
     - `frontend/src/app/ressources.test.ts` : 1 test regroupant 3 formulations réalistes vérifiant le bon routage.
 
+## Itération 9 : la saisie libre ignore les accents manquants
+
+- **Plan validé le 2026-11-18**, à partir d'un cas concret rapporté par le développeur : « quels sont les symptomes » (sans accent) tombait sur la réponse par défaut, alors que « symptôme » existe dans `MOTS_CLES` avec un accent. Correction générale (normalisation), pas un cas particulier ajouté.
+- **Dans le périmètre** : comparer le texte tapé et les mots-clés après suppression des accents, des deux côtés.
+- **Hors périmètre** : fautes de frappe/orthographe au-delà des accents, pluriels irréguliers.
+- **Critères d'acceptation** :
+  - Étant donné « quels sont les symptomes » (sans accent), quand on l'envoie, alors la réponse montre l'extrait thématique diagnostic (pas la réponse par défaut).
+  - Étant donné « je cherche un medecin » (sans accent), quand on l'envoie, alors la ressource médecins s'affiche.
+- **Codage estimé** : quelques minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/ressources.test.ts`.
+- **Tests unitaires prévus** : 2, un par critère d'acceptation.
+- **Bilan** :
+  - Durée de codage réelle : 45 secondes.
+  - Critères d'acceptation : les 2 satisfaits — « quels sont les symptomes » (sans accent) et « je cherche un medecin » (sans accent) routent correctement, couverts par 1 test.
+  - Reporté : les fautes de frappe au-delà des accents restent hors périmètre de cette itération (demande suivante du développeur, voir itération 10).
+  - Harnais : aucun blocage — `npm test` au vert (18 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 9` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : fonction `normaliser` (suppression des accents via NFD) appliquée au texte tapé et aux mots-clés avant comparaison.
+    - `frontend/src/app/ressources.test.ts` : 1 test sur deux formulations sans accent.
+
 ## À venir
 
 _Rien d'autre après cette itération, sauf retour du développeur._
