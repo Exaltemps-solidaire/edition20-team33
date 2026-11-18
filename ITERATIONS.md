@@ -122,9 +122,32 @@
     - `frontend/src/app/page.module.css` : style du bouton d'envoi.
     - `e2e/demo.spec.ts` : étape ajoutée couvrant les deux cas (mot-clé reconnu / contact humain) — démonstration du cas passant, hors DoD.
 
+## Itération 5 : Quand le chatbot ne reconnaît pas la question, un encadré signale que l'équipe ENDOmind est alertée
+
+- **Plan validé le 2026-11-18.** Temps restant annoncé au début de `/iteration 5` : ~10-15 minutes.
+- ✂️ Comme pour l'itération 4, le codage vise 3-5 minutes pour laisser de la marge à la publication ; le tour de test de l'équipe sera très court.
+- **Dans le périmètre** : quand `resoudreTexteLibre` ne reconnaît aucun mot-clé (réponse de contact humain), la bulle affichée s'accompagne d'un encadré visuel « ⚠️ Alerte envoyée à l'équipe ENDOmind ». Aucun envoi réel (pas d'e-mail, pas d'appel API) : c'est un indicateur visuel simulé, cohérent avec le reste de l'app qui n'a pas encore de backend branché.
+- **Hors périmètre** : envoi réel d'une alerte (e-mail, webhook), détection de situations sensibles au-delà du « je ne sais pas », sélecteur de région (reporté après, voir ci-dessous).
+- **Critères d'acceptation** :
+  - Étant donné une question tapée sans mot-clé connu, quand la réponse s'affiche, alors l'encadré « Alerte envoyée à l'équipe ENDOmind » apparaît avec elle.
+  - Étant donné une suggestion ou une question avec un mot-clé connu, quand la réponse s'affiche, alors aucun encadré d'alerte n'apparaît.
+- **Hypothèse de l'équipe couverte** : oui — l'hypothèse mesurée de l'équipe (cible 100 %) porte sur l'alerte automatique à la direction quand le chatbot ne sait pas répondre.
+- **Codage estimé** : 3-5 minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts` (champ `alerte` sur `ReponseSuggestion`), `frontend/src/app/ressources.test.ts`, `frontend/src/app/page.tsx`, `frontend/src/app/page.module.css`.
+- **Tests unitaires prévus** : 1 à 2, vérifiant que seule la réponse par défaut porte `alerte: true`.
+- **Étapes ajoutées à la démo** : extension de `test.step("Je tape une question et j'obtiens une ressource ou le contact humain")` pour vérifier l'encadré d'alerte.
+- **Bilan** :
+  - Durée de codage réelle : 39 secondes (budget réduit à 3-5 min, aucun dépassement).
+  - Critères d'acceptation : les 2 satisfaits — une question sans mot-clé connu affiche le contact humain accompagné de l'encadré « Alerte envoyée à l'équipe ENDOmind », une question avec un mot-clé connu n'affiche aucun encadré. `/health` et `/sante` répondent 200 sur le frontend (8080) et l'api (8081) en local après redéploiement. `$URL_PUBLIQUE/health` et `/sante` restent à confirmer par le développeur dans son navigateur.
+  - Reporté : rien de nouveau ; l'envoi réel de l'alerte (e-mail/webhook) reste hors périmètre, comme prévu — c'est un indicateur visuel simulé.
+  - Harnais : aucun blocage — `npm test` au vert (11 tests frontend, dont 1 nouveau sur le champ `alerte`), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 5` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : champ `alerte?: boolean` sur `ReponseSuggestion`, activé uniquement sur `REPONSE_PAR_DEFAUT` — sert les 2 critères.
+    - `frontend/src/app/ressources.test.ts` : 1 nouveau test Vitest vérifiant que seule la réponse par défaut porte `alerte: true` — point 2 de la DoD.
+    - `frontend/src/app/page.tsx` : encadré d'alerte affiché quand `reponse.alerte` est vrai — sert les 2 critères.
+    - `frontend/src/app/page.module.css` : style de l'encadré d'alerte.
+    - `e2e/demo.spec.ts` : assertion ajoutée sur la présence de l'encadré d'alerte — démonstration du cas passant, hors DoD.
+
 ## À venir
 
-⚠️ Ordre proposé à valider par les cadreurs : le temps restant s'annonce très court depuis l'itération 3 (15 min annoncées, consommées en grande partie par publication/déploiement à chaque itération). Si une seule itération reste possible, je recommande l'alerte automatique avant le sélecteur de région, car elle seule couvre l'hypothèse mesurée de l'équipe (cible 100 %) — le sélecteur de région est une amélioration d'ergonomie, pas la mesure attendue par le pitch.
-
-1. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
-2. Sélecteur de région (filière de soins régionale).
+1. Sélecteur de région (filière de soins régionale).

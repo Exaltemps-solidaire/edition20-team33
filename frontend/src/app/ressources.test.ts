@@ -43,4 +43,9 @@ describe("resoudreTexteLibre", () => {
     expect(reponse.ressources).toHaveLength(0);
     expect(reponse.intro).toContain("info@endomind.org");
   });
+
+  it("déclenche l'alerte uniquement quand aucun mot-clé n'est reconnu", () => {
+    expect(resoudreTexteLibre("Une question hors sujet").alerte).toBe(true);
+    expect(resoudreTexteLibre("Je cherche un spécialiste").alerte).toBeUndefined();
+  });
 });

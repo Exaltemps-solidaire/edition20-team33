@@ -98,6 +98,16 @@
   font-weight: 600;
 }
 
+.alerteBanniere {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #fdeccf;
+  border: 1px solid #ea5b0c;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .suggestions {
   display: flex;
   flex-wrap: wrap;

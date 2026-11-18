@@ -121,6 +121,9 @@ export default function Home() {
                     <a href="#">{ressource.lien}</a>
                   </div>
                 ))}
+                {message.reponse.alerte && (
+                  <div className={styles.alerteBanniere}>⚠️ Alerte envoyée à l&apos;équipe ENDOmind</div>
+                )}
               </div>
             );
           })}

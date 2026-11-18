@@ -10,6 +10,7 @@ export type Ressource = {
 export type ReponseSuggestion = {
   intro: string;
   ressources: Ressource[];
+  alerte?: boolean;
 };
 
 const REPONSE_DROITS: ReponseSuggestion = {
@@ -73,6 +74,7 @@ const REPONSE_PAR_DEFAUT: ReponseSuggestion = {
   intro:
     "Je n'ai pas encore de ressource prête pour cette question. Écrivez à info@endomind.org, l'équipe vous répond directement.",
   ressources: [],
+  alerte: true,
 };
 
 export function resoudreSuggestion(id: string): ReponseSuggestion {

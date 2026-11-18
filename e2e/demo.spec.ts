@@ -40,5 +40,6 @@ test("Démo : le cas passant", async ({ page }) => {
     await page.getByLabel("Votre question").fill("Une question hors sujet");
     await page.getByRole("button", { name: "Envoyer" }).click();
     await expect(page.getByText("info@endomind.org")).toBeVisible();
+    await expect(page.getByText("Alerte envoyée à l'équipe ENDOmind")).toBeVisible();
   });
 });
