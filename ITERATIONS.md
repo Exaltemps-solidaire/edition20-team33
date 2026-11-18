@@ -69,9 +69,24 @@
     - `DEPLOIEMENT.md` : section « connu comme fragile » mise à jour (les 4 suggestions ont désormais une vraie ressource).
     - `e2e/demo.spec.ts` : étape ajoutée couvrant les 3 nouvelles ressources — démonstration du cas passant, hors DoD.
 
+## Itération 3 : Au lancement, la patiente choisit un profil avant d'entrer dans le chatbot
+
+- **Plan proposé par l'agent, à valider par le développeur et les cadreurs avant codage.**
+- **Dans le périmètre** : un écran « Qui êtes-vous ? » affiché avant l'écran de chat (2-3 profils en boutons, ex. « Je viens d'être diagnostiquée », « Je cherche un spécialiste », « J'accompagne une proche »), sans connexion ni persistance. Un bouton dans l'en-tête du chat permet d'y revenir pour changer de profil.
+- **Hors périmètre** : personnalisation des ressources selon le profil choisi (le mapping suggestion → ressource reste le même pour tous, l'itération pose seulement l'écran et la navigation) ; saisie libre, région, alerte automatique.
+- **Critères d'acceptation** :
+  - Étant donné l'application ouverte, quand elle charge, alors l'écran « Qui êtes-vous ? » s'affiche avant le chat, avec les profils proposés.
+  - Étant donné l'écran « Qui êtes-vous ? », quand on clique sur un profil, alors l'écran du chatbot s'affiche.
+  - Étant donné le chat affiché, quand on clique sur le bouton de changement de profil, alors l'écran « Qui êtes-vous ? » réapparaît.
+- **Hypothèse de l'équipe couverte** : aucune directement — prépare l'écran d'entrée attendu par le prototype avant la saisie libre et l'alerte (itérations suivantes).
+- **Codage estimé** : 8-10 minutes.
+- **Fichiers prévus** : `frontend/src/app/page.tsx`, `frontend/src/app/page.module.css`, un nouveau composant ou état local pour l'écran profil (≈1 fichier de plus si extrait).
+- **Tests unitaires prévus** : 1 à 2, sur la logique de bascule d'écran si elle est extraite en fonction pure ; sinon, flagger (❗️) l'absence de logique métier testable et proposer d'ajouter le test à l'itération suivante qui en introduira (saisie libre).
+- **Étapes ajoutées à la démo** : `test.step("Je choisis un profil avant d'entrer dans le chatbot")`.
+- **Bilan** : _à remplir en fin d'itération._
+
 ## À venir
 
-1. Écran « Qui êtes-vous ? » au lancement (personas, pas de connexion) + bouton pour en changer.
-2. Saisie libre de question, avec réponse « je ne sais pas » + contact humain (info@endomind.org) quand hors ressources.
-3. Sélecteur de région (filière de soins régionale).
-4. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
+1. Saisie libre de question, avec réponse « je ne sais pas » + contact humain (info@endomind.org) quand hors ressources.
+2. Sélecteur de région (filière de soins régionale).
+3. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
