@@ -96,8 +96,23 @@
     - `frontend/src/app/page.module.css` : styles de l'écran de profil et du bouton de bascule — critère 1.
     - `e2e/demo.spec.ts` : étape ajoutée pour choisir un profil avant d'entrer dans le chat — démonstration du cas passant, hors DoD.
 
+## Itération 4 : La patiente tape sa question au clavier et obtient une ressource ou le contact humain
+
+- **Plan proposé par l'agent, à valider par le développeur et les cadreurs avant codage.**
+- ✂️ Le temps restant annoncé au début de l'itération 3 était déjà serré (~15-20 min, dont l'essentiel entamé par la publication et le tour de test). Si le temps restant au début de `/iteration 4` ne permet plus codage + publication + tour de test, cette itération devient la dernière : consacre-la à stabiliser ce qui est montré (vérifier les 4 ressources, l'écran de profil, les 2 endpoints de santé) plutôt qu'à ajouter la saisie libre à la hâte.
+- **Dans le périmètre** : activer le champ de saisie (actuellement désactivé), faire correspondre le texte tapé à une suggestion connue par mots-clés simples (droits/ALD/RQTH, médecin/spécialiste, diagnostic/guide, groupe/parole), et à défaut afficher le message de contact humain déjà présent dans `REPONSE_PAR_DEFAUT`.
+- **Hors périmètre** : compréhension de langage naturel avancée, historique persistant, région, alerte automatique à la direction.
+- **Critères d'acceptation** :
+  - Étant donné le chat affiché, quand on tape une question contenant un mot-clé connu (ex. « spécialiste ») et qu'on valide, alors la ressource correspondante s'affiche.
+  - Étant donné le chat affiché, quand on tape une question sans mot-clé connu et qu'on valide, alors le message de contact humain s'affiche.
+- **Hypothèse de l'équipe couverte** : aucune directement — prépare la saisie libre avant l'alerte automatique (itération suivante), qui elle couvre l'hypothèse mesurée de l'équipe.
+- **Codage estimé** : 8-10 minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts` (fonction de correspondance mots-clés → id de suggestion), `frontend/src/app/ressources.test.ts`, `frontend/src/app/page.tsx` (activer le champ, appeler la résolution).
+- **Tests unitaires prévus** : 1 à 3, sur la fonction de correspondance mots-clés → suggestion.
+- **Étapes ajoutées à la démo** : `test.step("Je tape une question et j'obtiens une ressource ou le contact humain")`.
+- **Bilan** : _à remplir en fin d'itération._
+
 ## À venir
 
-1. Saisie libre de question, avec réponse « je ne sais pas » + contact humain (info@endomind.org) quand hors ressources.
-2. Sélecteur de région (filière de soins régionale).
-3. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
+1. Sélecteur de région (filière de soins régionale).
+2. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
