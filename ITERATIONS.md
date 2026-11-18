@@ -98,8 +98,8 @@
 
 ## Itération 4 : La patiente tape sa question au clavier et obtient une ressource ou le contact humain
 
-- **Plan proposé par l'agent, à valider par le développeur et les cadreurs avant codage.**
-- ✂️ Le temps restant annoncé au début de l'itération 3 était déjà serré (~15-20 min, dont l'essentiel entamé par la publication et le tour de test). Si le temps restant au début de `/iteration 4` ne permet plus codage + publication + tour de test, cette itération devient la dernière : consacre-la à stabiliser ce qui est montré (vérifier les 4 ressources, l'écran de profil, les 2 endpoints de santé) plutôt qu'à ajouter la saisie libre à la hâte.
+- **Plan validé le 2026-11-18.** Temps restant annoncé au début de `/iteration 4` : ~15 minutes.
+- ✂️ Avec 15 minutes et ~5 minutes de publication incompressibles, le codage est réduit à 5-6 minutes (au lieu des 8-10 estimées), au prix d'un tour de test de l'équipe très court voire inexistant. Si le codage dépasse 6-7 minutes, je m'arrête et je publie ce qui marche, quitte à reporter le cas « sans mot-clé connu ».
 - **Dans le périmètre** : activer le champ de saisie (actuellement désactivé), faire correspondre le texte tapé à une suggestion connue par mots-clés simples (droits/ALD/RQTH, médecin/spécialiste, diagnostic/guide, groupe/parole), et à défaut afficher le message de contact humain déjà présent dans `REPONSE_PAR_DEFAUT`.
 - **Hors périmètre** : compréhension de langage naturel avancée, historique persistant, région, alerte automatique à la direction.
 - **Critères d'acceptation** :
@@ -110,7 +110,17 @@
 - **Fichiers prévus** : `frontend/src/app/ressources.ts` (fonction de correspondance mots-clés → id de suggestion), `frontend/src/app/ressources.test.ts`, `frontend/src/app/page.tsx` (activer le champ, appeler la résolution).
 - **Tests unitaires prévus** : 1 à 3, sur la fonction de correspondance mots-clés → suggestion.
 - **Étapes ajoutées à la démo** : `test.step("Je tape une question et j'obtiens une ressource ou le contact humain")`.
-- **Bilan** : _à remplir en fin d'itération._
+- **Bilan** :
+  - Durée de codage réelle : 68 secondes (budget réduit à 5-6 min compte tenu du temps restant serré, aucun dépassement).
+  - Critères d'acceptation : les 2 satisfaits — taper une question avec un mot-clé connu (ex. « spécialiste ») affiche la ressource correspondante, taper une question sans mot-clé connu affiche le message de contact humain. `/health` et `/sante` répondent 200 sur le frontend (8080) et l'api (8081) en local après redéploiement. `$URL_PUBLIQUE/health` et `/sante` restent à confirmer par le développeur dans son navigateur.
+  - Reporté : rien de nouveau par rapport au plan.
+  - Harnais : aucun blocage — `npm test` au vert (10 tests frontend, dont 2 nouveaux sur `resoudreTexteLibre`), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 4` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : ajout de `resoudreTexteLibre` (correspondance mots-clés → suggestion, repli sur le contact humain) — logique métier testable, sert les 2 critères.
+    - `frontend/src/app/ressources.test.ts` : 2 nouveaux tests Vitest sur `resoudreTexteLibre` — point 2 de la DoD.
+    - `frontend/src/app/page.tsx` : champ de saisie activé, état `texteLibre`, soumission du formulaire appelant `resoudreTexteLibre` — sert les 2 critères.
+    - `frontend/src/app/page.module.css` : style du bouton d'envoi.
+    - `e2e/demo.spec.ts` : étape ajoutée couvrant les deux cas (mot-clé reconnu / contact humain) — démonstration du cas passant, hors DoD.
 
 ## À venir
 

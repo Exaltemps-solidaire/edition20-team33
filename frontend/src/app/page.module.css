@@ -143,6 +143,16 @@
   font-size: 14px;
 }
 
+.inputArea button {
+  padding: 10px 16px;
+  border-radius: 100px;
+  border: none;
+  background: var(--endo-framboise);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 .changerProfil {
   margin-left: auto;
   padding: 6px 10px;

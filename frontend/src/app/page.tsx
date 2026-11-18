@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import styles from "./page.module.css";
 import { PROFILS } from "./profils";
-import { resoudreSuggestion, type ReponseSuggestion } from "./ressources";
+import { resoudreSuggestion, resoudreTexteLibre, type ReponseSuggestion } from "./ressources";
 
 type Message =
   | { type: "bot-intro" }
@@ -20,6 +20,7 @@ const SUGGESTIONS: { id: string; label: string }[] = [
 export default function Home() {
   const [profilId, setProfilId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([{ type: "bot-intro" }]);
+  const [texteLibre, setTexteLibre] = useState("");
 
   function poserQuestion(id: string, label: string) {
     const reponse = resoudreSuggestion(id);
@@ -28,6 +29,19 @@ export default function Home() {
       { type: "user", texte: label },
       { type: "bot-reponse", reponse },
     ]);
+  }
+
+  function envoyerTexteLibre(e: FormEvent) {
+    e.preventDefault();
+    const texte = texteLibre.trim();
+    if (!texte) return;
+    const reponse = resoudreTexteLibre(texte);
+    setMessages((precedents) => [
+      ...precedents,
+      { type: "user", texte },
+      { type: "bot-reponse", reponse },
+    ]);
+    setTexteLibre("");
   }
 
   if (profilId === null) {
@@ -125,8 +139,15 @@ export default function Home() {
           ))}
         </div>
 
-        <form className={styles.inputArea} onSubmit={(e) => e.preventDefault()}>
-          <input type="text" placeholder="Posez votre question…" aria-label="Votre question" disabled />
+        <form className={styles.inputArea} onSubmit={envoyerTexteLibre}>
+          <input
+            type="text"
+            placeholder="Posez votre question…"
+            aria-label="Votre question"
+            value={texteLibre}
+            onChange={(e) => setTexteLibre(e.target.value)}
+          />
+          <button type="submit">Envoyer</button>
         </form>
       </div>
     </div>

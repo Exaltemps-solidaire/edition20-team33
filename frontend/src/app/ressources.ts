@@ -82,3 +82,21 @@ export function resoudreSuggestion(id: string): ReponseSuggestion {
   if (id === "groupes") return REPONSE_GROUPES;
   return REPONSE_PAR_DEFAUT;
 }
+
+const MOTS_CLES: { motCle: string; id: string }[] = [
+  { motCle: "ald", id: "droits" },
+  { motCle: "rqth", id: "droits" },
+  { motCle: "droit", id: "droits" },
+  { motCle: "médecin", id: "medecins" },
+  { motCle: "spécialiste", id: "medecins" },
+  { motCle: "diagnostic", id: "guide" },
+  { motCle: "guide", id: "guide" },
+  { motCle: "groupe", id: "groupes" },
+  { motCle: "parole", id: "groupes" },
+];
+
+export function resoudreTexteLibre(texte: string): ReponseSuggestion {
+  const texteNormalise = texte.toLowerCase();
+  const correspondance = MOTS_CLES.find(({ motCle }) => texteNormalise.includes(motCle));
+  return correspondance ? resoudreSuggestion(correspondance.id) : REPONSE_PAR_DEFAUT;
+}

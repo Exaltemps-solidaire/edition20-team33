@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resoudreSuggestion } from "./ressources";
+import { resoudreSuggestion, resoudreTexteLibre } from "./ressources";
 
 describe("resoudreSuggestion", () => {
   it("renvoie les ressources ALD et RQTH pour la suggestion droits", () => {
@@ -27,6 +27,19 @@ describe("resoudreSuggestion", () => {
 
   it("renvoie une réponse par défaut sans ressource pour une suggestion inconnue", () => {
     const reponse = resoudreSuggestion("inconnue");
+    expect(reponse.ressources).toHaveLength(0);
+    expect(reponse.intro).toContain("info@endomind.org");
+  });
+});
+
+describe("resoudreTexteLibre", () => {
+  it("reconnaît un mot-clé connu dans une phrase libre", () => {
+    const reponse = resoudreTexteLibre("Je cherche un spécialiste près de chez moi");
+    expect(reponse.ressources.map((r) => r.titre)).toEqual(["Carte des filières de soins par région"]);
+  });
+
+  it("renvoie le contact humain quand aucun mot-clé n'est reconnu", () => {
+    const reponse = resoudreTexteLibre("Bonjour, j'ai une question sur autre chose");
     expect(reponse.ressources).toHaveLength(0);
     expect(reponse.intro).toContain("info@endomind.org");
   });

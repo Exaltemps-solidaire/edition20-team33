@@ -31,4 +31,14 @@ test("Démo : le cas passant", async ({ page }) => {
     await page.getByRole("button", { name: "Groupes de parole" }).click();
     await expect(page.getByText("Groupes de parole et cafés patientes")).toBeVisible();
   });
+
+  await test.step("Je tape une question et j'obtiens une ressource ou le contact humain", async () => {
+    await page.getByLabel("Votre question").fill("Je cherche un spécialiste");
+    await page.getByRole("button", { name: "Envoyer" }).click();
+    await expect(page.getByText("Carte des filières de soins par région")).toHaveCount(2);
+
+    await page.getByLabel("Votre question").fill("Une question hors sujet");
+    await page.getByRole("button", { name: "Envoyer" }).click();
+    await expect(page.getByText("info@endomind.org")).toBeVisible();
+  });
 });
