@@ -305,6 +305,32 @@
     - `frontend/src/app/page.tsx` : `ressource.lien` affiché en `<span>` au lieu d'un `<a href="#">` ; le clic sur « Changer de profil » réinitialise aussi la conversation, le texte en cours et la région.
     - `frontend/src/app/page.module.css` : règle `.ressourceCard a` renommée `.ressourceLien` (même style visuel, plus de sémantique de lien).
 
+## Itération 13 : une question de clarification avant l'email, au lieu d'abandonner directement
+
+- **Plan validé le 2026-11-18**, process détaillé fourni par le développeur (3 étapes). Temps restant annoncé : moins de 10 minutes → on code seulement les étapes 2-3 (relance puis email), l'étape 1 (réponses déjà concises depuis l'itération 11) reste hors périmètre.
+- **Dans le périmètre** :
+  - 1er message sans mot-clé reconnu : poser une question de clarification ciblée (pas d'email, pas d'alerte) orientant vers les thèmes connus (droits, médecins, guide, groupes).
+  - 2e message consécutif sans mot-clé reconnu (après la clarification) : réponse finale avec l'email de contact et une invitation à préciser l'objet de la demande, alerte visuelle comme avant.
+  - Un vrai match (à tout moment) réinitialise l'état : la prochaine question hors sujet aura droit à nouveau à une clarification.
+- **Hors périmètre** : reformuler les réponses trouvées en liste à puces (étape 1), mémoriser plusieurs échanges au-delà de l'état « en attente de clarification oui/non ».
+- **Critères d'acceptation** :
+  - Étant donné une question hors sujet envoyée pour la première fois, quand elle est envoyée, alors la réponse est une question de clarification (pas d'email, pas d'alerte).
+  - Étant donné une deuxième question hors sujet consécutive (après une clarification restée sans match), quand elle est envoyée, alors la réponse finale avec l'email et l'alerte s'affiche.
+  - Étant donné un vrai mot-clé reconnu juste après une clarification, quand il est envoyé, alors la ressource correspondante s'affiche normalement (pas de confusion avec l'email).
+- **Codage estimé** : quelques minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/ressources.test.ts`, `frontend/src/app/page.tsx`.
+- **Tests unitaires prévus** : 3 (un par critère), le reste des tests existants sur `resoudreTexteLibre` est adapté au nouveau comportement à deux temps.
+- **Bilan** :
+  - Durée de codage réelle : 51 secondes.
+  - Critères d'acceptation : les 3 satisfaits — 1re question hors sujet → clarification sans email ni alerte ; 2e question hors sujet consécutive → email + alerte ; un vrai mot-clé juste après une clarification répond normalement, sans trace de l'état précédent.
+  - Reporté : l'étape 1 (reformulation des réponses trouvées en liste à puces concise) reste hors périmètre, proposée en itération suivante si le développeur le souhaite encore.
+  - Harnais : aucun blocage — `npm test` au vert (23 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 13` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : `REPONSE_CLARIFICATION` ajoutée, `resoudreTexteLibre` prend un 2e paramètre `enAttenteClarification` (défaut `false`) pour choisir entre clarification et réponse finale avec email ; texte de `REPONSE_PAR_DEFAUT` enrichi de l'invitation à préciser l'objet de la demande.
+    - `frontend/src/app/page.tsx` : état `enAttenteClarification`, mis à jour après chaque texte libre, réinitialisé sur un vrai match et sur « Changer de profil ».
+    - `frontend/src/app/ressources.test.ts` : 2 tests remplacés, 1 ajouté, pour couvrir les 3 critères.
+    - `e2e/demo.spec.ts` : une question hors sujet suivie d'une deuxième avant d'atteindre le contact humain.
+
 ## À venir
 
-- Questions de relance pour affiner le besoin et challenger la cliente (demande du développeur après l'itération 10) : encore à cadrer avec lui (taille, déclencheur) avant toute itération.
+_Rien d'autre après cette itération, sauf retour du développeur._

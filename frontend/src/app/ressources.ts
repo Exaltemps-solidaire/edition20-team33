@@ -103,9 +103,15 @@ const REPONSE_GROUPES: ReponseSuggestion = {
 
 const REPONSE_PAR_DEFAUT: ReponseSuggestion = {
   intro:
-    "Je n'ai pas encore de ressource prête pour cette question. Écrivez à info@endomind.org, l'équipe vous répond directement.",
+    "Je n'ai pas trouvé de ressource pour cette question. Écrivez à info@endomind.org en précisant l'objet de votre demande, l'équipe vous répond directement.",
   ressources: [],
   alerte: true,
+};
+
+const REPONSE_CLARIFICATION: ReponseSuggestion = {
+  intro:
+    "Pour mieux vous orienter, votre question concerne-t-elle plutôt vos droits, un médecin, le guide sur le diagnostic, ou les groupes de parole ?",
+  ressources: [],
 };
 
 export function resoudreSuggestion(id: string, themeGuide?: string): ReponseSuggestion {
@@ -194,15 +200,15 @@ function motCleApproche(mots: string[], motCle: string): boolean {
   return mots.some((mot) => distanceLevenshtein(mot, motCle) <= tolerance);
 }
 
-export function resoudreTexteLibre(texte: string): ReponseSuggestion {
+export function resoudreTexteLibre(texte: string, enAttenteClarification = false): ReponseSuggestion {
   const texteNormalise = normaliser(texte);
   const mots = texteNormalise.split(/[^a-z0-9]+/).filter(Boolean);
   const correspondance = MOTS_CLES.find(({ motCle }) => {
     const motCleNormalise = normaliser(motCle);
     return texteNormalise.includes(motCleNormalise) || motCleApproche(mots, motCleNormalise);
   });
-  if (!correspondance) return REPONSE_PAR_DEFAUT;
-  return resoudreSuggestion(correspondance.id, correspondance.themeGuide);
+  if (correspondance) return resoudreSuggestion(correspondance.id, correspondance.themeGuide);
+  return enAttenteClarification ? REPONSE_PAR_DEFAUT : REPONSE_CLARIFICATION;
 }
 
 export const REGIONS = ["Île-de-France", "Auvergne-Rhône-Alpes", "Occitanie", "Hauts-de-France"];

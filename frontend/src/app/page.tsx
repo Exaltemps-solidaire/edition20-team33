@@ -22,6 +22,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([{ type: "bot-intro" }]);
   const [texteLibre, setTexteLibre] = useState("");
   const [region, setRegion] = useState<string | null>(null);
+  const [enAttenteClarification, setEnAttenteClarification] = useState(false);
 
   function poserQuestion(id: string, label: string) {
     const reponse = id === "medecins" ? personnaliserRegion(resoudreSuggestion(id), region) : resoudreSuggestion(id);
@@ -30,18 +31,20 @@ export default function Home() {
       { type: "user", texte: label },
       { type: "bot-reponse", reponse },
     ]);
+    setEnAttenteClarification(false);
   }
 
   function envoyerTexteLibre(e: FormEvent) {
     e.preventDefault();
     const texte = texteLibre.trim();
     if (!texte) return;
-    const reponse = resoudreTexteLibre(texte);
+    const reponse = resoudreTexteLibre(texte, enAttenteClarification);
     setMessages((precedents) => [
       ...precedents,
       { type: "user", texte },
       { type: "bot-reponse", reponse },
     ]);
+    setEnAttenteClarification(reponse.ressources.length === 0 && !reponse.alerte);
     setTexteLibre("");
   }
 
@@ -89,6 +92,7 @@ export default function Home() {
               setMessages([{ type: "bot-intro" }]);
               setTexteLibre("");
               setRegion(null);
+              setEnAttenteClarification(false);
             }}
           >
             Changer de profil

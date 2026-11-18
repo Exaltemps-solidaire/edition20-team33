@@ -66,15 +66,24 @@ describe("resoudreTexteLibre", () => {
     expect(reponse.ressources[0].titre).toBe("Le diagnostic, et maintenant ?");
   });
 
-  it("renvoie le contact humain quand aucun mot-clé n'est reconnu", () => {
+  it("pose une question de clarification la première fois, sans email ni alerte", () => {
     const reponse = resoudreTexteLibre("Bonjour, j'ai une question sur autre chose");
     expect(reponse.ressources).toHaveLength(0);
-    expect(reponse.intro).toContain("info@endomind.org");
+    expect(reponse.intro).not.toContain("info@endomind.org");
+    expect(reponse.alerte).toBeUndefined();
   });
 
-  it("déclenche l'alerte uniquement quand aucun mot-clé n'est reconnu", () => {
-    expect(resoudreTexteLibre("Une question hors sujet").alerte).toBe(true);
-    expect(resoudreTexteLibre("Je cherche un spécialiste").alerte).toBeUndefined();
+  it("renvoie le contact humain avec alerte à la deuxième question sans match consécutive", () => {
+    const reponse = resoudreTexteLibre("Une question hors sujet", true);
+    expect(reponse.ressources).toHaveLength(0);
+    expect(reponse.intro).toContain("info@endomind.org");
+    expect(reponse.alerte).toBe(true);
+  });
+
+  it("un vrai mot-clé répond normalement même juste après une clarification", () => {
+    const reponse = resoudreTexteLibre("Je cherche un spécialiste", true);
+    expect(reponse.ressources.map((r) => r.titre)).toEqual(["Carte des filières de soins par région"]);
+    expect(reponse.alerte).toBeUndefined();
   });
 
   it("reconnaît des formulations réalistes au-delà des mots-clés exacts d'origine", () => {
@@ -104,9 +113,9 @@ describe("resoudreTexteLibre", () => {
   });
 
   it("ne déclenche pas de faux positif sur une question vraiment hors sujet", () => {
-    const reponse = resoudreTexteLibre("Bonjour, est-ce que vous vendez des billets de train");
-    expect(reponse.ressources).toHaveLength(0);
-    expect(reponse.alerte).toBe(true);
+    const texte = "Bonjour, est-ce que vous vendez des billets de train";
+    expect(resoudreTexteLibre(texte).ressources).toHaveLength(0);
+    expect(resoudreTexteLibre(texte, true).alerte).toBe(true);
   });
 });
 
