@@ -29,12 +29,40 @@
   - `DEPLOIEMENT.md`
 - **Tests unitaires prévus** : 1 à 3, sur la fonction de résolution suggestion → ressource dans `ressources.ts` (cas connu « droits », cas inconnu renvoyant la réponse par défaut).
 - **Étapes ajoutées à la démo** : `test.step("Je vois les suggestions de questions fréquentes")`, `test.step("Je clique sur 'Mes droits (ALD, RQTH)' et je vois la ressource")`.
-- **Bilan** : _à remplir en fin d'itération (durée de codage réelle, dépassement éventuel, fait, reporté, modifications fichier par fichier)._
+- **Bilan** :
+  - Durée de codage réelle : 2 minutes (budget 10 min, aucun dépassement).
+  - Critères d'acceptation : les 3 satisfaits — écran d'accueil avec logo/bandeau/suggestions, clic sur « Mes droits (ALD, RQTH) » affichant la ressource ALD, `/health` et `/sante` répondent 200 sur le frontend (8080) et l'api (8081) en local. `$URL_PUBLIQUE/health` et `/sante` restent à confirmer par le développeur dans son navigateur (non vérifiable depuis la machine).
+  - Reporté : rien de nouveau par rapport au plan (tout le reste était déjà en « À venir »).
+  - Harnais : aucun blocage — `npm test` au vert, `./scripts/verifier-deployabilite.sh --construire` sans borne (Docker absent, construction Docker non vérifiée, Podman utilisé directement pour le déploiement réel), `signaler-version.sh 1` accepté (`moteur_avance: false`).
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : mapping pur suggestion → ressource ENDOmind (ALD/RQTH + réponse par défaut) — sert les critères 2 et la testabilité (point 2 de la DoD).
+    - `frontend/src/app/ressources.test.ts` : 2 tests Vitest sur `resoudreSuggestion` — point 2 de la DoD.
+    - `frontend/src/app/page.tsx` : écran du chatbot (en-tête, bulle d'accueil, 4 suggestions, zone de saisie désactivée, affichage de la ressource au clic) — critères 1 et 2.
+    - `frontend/src/app/page.module.css` : styles reproduisant la charte ENDOmind du prototype — critère 1.
+    - `.env.example`, `DEPLOIEMENT.md` : squelette du contrat de déployabilité — critère 3.
+    - `api/Dockerfile`, `frontend/Dockerfile` : images de base qualifiées `docker.io/library/...` pour le build sur cette machine.
+    - `podman-compose.yml` : recette de déploiement (ports 8080/8081, réseau `core-network`).
+    - `e2e/demo.spec.ts` : 2 étapes ajoutées (suggestions visibles, ressource ALD après clic) — démonstration du cas passant, hors DoD.
+
+## Itération 2 : Les 3 autres suggestions renvoient chacune leur ressource ENDOmind dédiée
+
+- ⚠️ Détaillée par anticipation avec le temps restant estimé en fin d'itération 1 (~24 minutes) ; **à reconfirmer auprès du développeur au début de `/iteration 2`**, comme l'exige la DoR de chaque itération.
+- **Dans le périmètre** : ajouter dans `ressources.ts` les réponses pour « Réseau de médecins », « Le guide diagnostic » et « Groupes de parole » (chacune une ressource ENDOmind plausible, en dur), au lieu du message par défaut actuel.
+- **Hors périmètre** : saisie libre, persona, région, alerte automatique (inchangé, toujours en « À venir »).
+- **Critères d'acceptation** :
+  - Étant donné l'écran d'accueil, quand on clique sur « Réseau de médecins », alors une ressource ENDOmind dédiée s'affiche (pas le message par défaut).
+  - Étant donné l'écran d'accueil, quand on clique sur « Le guide diagnostic » ou « Groupes de parole », alors chacune affiche sa propre ressource.
+  - Étant donné l'application redéployée, quand on vérifie `$URL_PUBLIQUE/health` et `/sante`, alors les deux répondent 200.
+- **Hypothèse de l'équipe couverte** : aucune — complète le phase 1 du plan de livraison de l'équipe (« chatbot avec suggestions et ressources ») avant l'alerte automatique.
+- **Codage estimé** : 5 minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/ressources.test.ts`.
+- **Tests unitaires prévus** : 1 à 2, un par nouvelle suggestion résolue.
+- **Étapes ajoutées à la démo** : `test.step("Je clique sur chaque suggestion et je vois une ressource dédiée")`.
+- **Bilan** : _à remplir en fin d'itération._
 
 ## À venir
 
 1. Écran « Qui êtes-vous ? » au lancement (personas, pas de connexion) + bouton pour en changer.
-2. Les 3 autres suggestions (réseau de médecins, guide diagnostic, groupes de parole) avec leurs ressources dédiées.
-3. Saisie libre de question, avec réponse « je ne sais pas » + contact humain (info@endomind.org) quand hors ressources.
-4. Sélecteur de région (filière de soins régionale).
-5. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
+2. Saisie libre de question, avec réponse « je ne sais pas » + contact humain (info@endomind.org) quand hors ressources.
+3. Sélecteur de région (filière de soins régionale).
+4. Alerte automatique à la direction quand le chatbot ne sait pas répondre ou détecte une situation sensible (encadré « Alerte envoyée à l'équipe ENDOmind ») — couvre l'hypothèse mesurée de l'équipe (cible 100 %).
