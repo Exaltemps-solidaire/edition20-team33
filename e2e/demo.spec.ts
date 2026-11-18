@@ -7,6 +7,11 @@ test("Démo : le cas passant", async ({ page }) => {
     await expect(page.locator("body")).toBeVisible();
   });
 
+  await test.step("Je choisis un profil avant d'entrer dans le chatbot", async () => {
+    await expect(page.getByRole("button", { name: "Je viens d'être diagnostiquée" })).toBeVisible();
+    await page.getByRole("button", { name: "Je viens d'être diagnostiquée" }).click();
+  });
+
   await test.step("Je vois les suggestions de questions fréquentes", async () => {
     await expect(page.getByRole("button", { name: "Mes droits (ALD, RQTH)" })).toBeVisible();
   });

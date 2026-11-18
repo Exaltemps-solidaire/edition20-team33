@@ -71,7 +71,8 @@
 
 ## Itération 3 : Au lancement, la patiente choisit un profil avant d'entrer dans le chatbot
 
-- **Plan proposé par l'agent, à valider par le développeur et les cadreurs avant codage.**
+- **Plan validé le 2026-11-18.** Temps restant annoncé au début de `/iteration 3` : ~15-20 minutes.
+- ✂️ Avec 15-20 minutes restantes et un codage estimé à 8-10 minutes + ~5 minutes de publication, il reste très peu de marge pour le tour de test de l'équipe (0 à 7 minutes). Si le temps restant se confirme en bas de fourchette, cette itération sera probablement la dernière avant le pitch : je viserai un codage plus proche de 5-6 minutes et je reporterai le 3e critère (bouton de changement de profil) si besoin, plutôt que de dépasser le budget.
 - **Dans le périmètre** : un écran « Qui êtes-vous ? » affiché avant l'écran de chat (2-3 profils en boutons, ex. « Je viens d'être diagnostiquée », « Je cherche un spécialiste », « J'accompagne une proche »), sans connexion ni persistance. Un bouton dans l'en-tête du chat permet d'y revenir pour changer de profil.
 - **Hors périmètre** : personnalisation des ressources selon le profil choisi (le mapping suggestion → ressource reste le même pour tous, l'itération pose seulement l'écran et la navigation) ; saisie libre, région, alerte automatique.
 - **Critères d'acceptation** :
@@ -83,7 +84,17 @@
 - **Fichiers prévus** : `frontend/src/app/page.tsx`, `frontend/src/app/page.module.css`, un nouveau composant ou état local pour l'écran profil (≈1 fichier de plus si extrait).
 - **Tests unitaires prévus** : 1 à 2, sur la logique de bascule d'écran si elle est extraite en fonction pure ; sinon, flagger (❗️) l'absence de logique métier testable et proposer d'ajouter le test à l'itération suivante qui en introduira (saisie libre).
 - **Étapes ajoutées à la démo** : `test.step("Je choisis un profil avant d'entrer dans le chatbot")`.
-- **Bilan** : _à remplir en fin d'itération._
+- **Bilan** :
+  - Durée de codage réelle : moins d'1 minute (51 secondes, budget 8-10 min, aucun dépassement — l'estimation initiale était large).
+  - Critères d'acceptation : les 3 satisfaits — l'écran « Qui êtes-vous ? » s'affiche au chargement avec 3 profils, un clic sur un profil ouvre le chat, le bouton « Changer de profil » dans l'en-tête du chat y ramène. `/health` et `/sante` répondent 200 sur le frontend (8080) et l'api (8081) en local après redéploiement. `$URL_PUBLIQUE/health` et `/sante` restent à confirmer par le développeur dans son navigateur.
+  - Reporté : rien — la personnalisation des ressources selon le profil choisi reste hors périmètre, comme prévu, et n'a pas été ajoutée.
+  - Harnais : aucun blocage — `npm test` au vert (11 tests dont 3 nouveaux sur `trouverProfil`), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 3` accepté. Le point flagué dans le plan (logique métier testable) a été résolu en extrayant `profils.ts` (liste + résolution par id) plutôt qu'en codant les profils en dur dans `page.tsx` — cohérent avec le choix déjà fait pour `ressources.ts`.
+  - **Modifications** :
+    - `frontend/src/app/profils.ts` : liste des 3 profils + fonction pure `trouverProfil(id)` — logique métier testable, sert la testabilité (point 2 de la DoD).
+    - `frontend/src/app/profils.test.ts` : 3 tests Vitest sur `trouverProfil` et la liste `PROFILS` — point 2 de la DoD.
+    - `frontend/src/app/page.tsx` : état `profilId`, écran de choix de profil avant le chat, bouton « Changer de profil » dans l'en-tête — sert les 3 critères.
+    - `frontend/src/app/page.module.css` : styles de l'écran de profil et du bouton de bascule — critère 1.
+    - `e2e/demo.spec.ts` : étape ajoutée pour choisir un profil avant d'entrer dans le chat — démonstration du cas passant, hors DoD.
 
 ## À venir
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./page.module.css";
+import { PROFILS } from "./profils";
 import { resoudreSuggestion, type ReponseSuggestion } from "./ressources";
 
 type Message =
@@ -17,6 +18,7 @@ const SUGGESTIONS: { id: string; label: string }[] = [
 ];
 
 export default function Home() {
+  const [profilId, setProfilId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([{ type: "bot-intro" }]);
 
   function poserQuestion(id: string, label: string) {
@@ -28,6 +30,34 @@ export default function Home() {
     ]);
   }
 
+  if (profilId === null) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.screen}>
+          <header className={styles.header}>
+            <div className={styles.logo}>ENDO</div>
+            <div>
+              <h1>ENDOMIND</h1>
+              <p>Qui êtes-vous ?</p>
+            </div>
+          </header>
+          <div className={styles.profils}>
+            {PROFILS.map((profil) => (
+              <button
+                key={profil.id}
+                className={styles.profilButton}
+                onClick={() => setProfilId(profil.id)}
+              >
+                <strong>{profil.label}</strong>
+                <span>{profil.description}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       <div className={styles.screen}>
@@ -37,6 +67,9 @@ export default function Home() {
             <h1>ENDOMIND</h1>
             <p>Chatbot d&apos;information · Pas d&apos;avis médical</p>
           </div>
+          <button className={styles.changerProfil} onClick={() => setProfilId(null)}>
+            Changer de profil
+          </button>
         </header>
 
         <div className={styles.messages}>

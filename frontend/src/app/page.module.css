@@ -142,3 +142,43 @@
   border: 1px solid var(--endo-creme);
   font-size: 14px;
 }
+
+.changerProfil {
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: transparent;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.profils {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 16px;
+}
+
+.profilButton {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--endo-framboise);
+  background: #fff;
+  color: var(--endo-encre);
+  text-align: left;
+  cursor: pointer;
+}
+
+.profilButton strong {
+  color: var(--endo-framboise);
+}
+
+.profilButton span {
+  font-size: 13px;
+  opacity: 0.8;
+}
