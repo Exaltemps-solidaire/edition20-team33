@@ -18,8 +18,9 @@ pas d'appel à l'API ni à un service tiers.
 
 ## Connu comme fragile ou inachevé
 
-- Seule la suggestion « Mes droits (ALD, RQTH) » renvoie une vraie ressource ; les 3 autres suggestions
-  renvoient un message par défaut invitant à écrire à `info@endomind.org`.
+- Les 4 suggestions renvoient désormais chacune une vraie ressource (ALD/RQTH, filières de soins,
+  guide diagnostic, groupes de parole) ; seule une question tapée en libre renverrait encore le
+  message par défaut, mais la saisie libre n'est pas encore fonctionnelle (voir ci-dessous).
 - La zone de saisie libre est affichée mais désactivée (non fonctionnelle).
 - Pas d'écran « Qui êtes-vous ? » (personas) ni d'alerte automatique à la direction : prévus aux
   itérations suivantes (voir `ITERATIONS.md`).

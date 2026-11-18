@@ -10,8 +10,23 @@ describe("resoudreSuggestion", () => {
     ]);
   });
 
-  it("renvoie une réponse par défaut sans ressource pour une suggestion inconnue", () => {
+  it("renvoie la carte des filières de soins pour la suggestion medecins", () => {
     const reponse = resoudreSuggestion("medecins");
+    expect(reponse.ressources.map((r) => r.titre)).toEqual(["Carte des filières de soins par région"]);
+  });
+
+  it("renvoie le guide diagnostic pour la suggestion guide", () => {
+    const reponse = resoudreSuggestion("guide");
+    expect(reponse.ressources.map((r) => r.titre)).toEqual(["Le diagnostic, et maintenant ?"]);
+  });
+
+  it("renvoie les groupes de parole pour la suggestion groupes", () => {
+    const reponse = resoudreSuggestion("groupes");
+    expect(reponse.ressources.map((r) => r.titre)).toEqual(["Groupes de parole et cafés patientes"]);
+  });
+
+  it("renvoie une réponse par défaut sans ressource pour une suggestion inconnue", () => {
+    const reponse = resoudreSuggestion("inconnue");
     expect(reponse.ressources).toHaveLength(0);
     expect(reponse.intro).toContain("info@endomind.org");
   });

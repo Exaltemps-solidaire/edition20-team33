@@ -46,7 +46,7 @@
 
 ## Itération 2 : Les 3 autres suggestions renvoient chacune leur ressource ENDOmind dédiée
 
-- ⚠️ Détaillée par anticipation avec le temps restant estimé en fin d'itération 1 (~24 minutes) ; **à reconfirmer auprès du développeur au début de `/iteration 2`**, comme l'exige la DoR de chaque itération.
+- **Plan validé le 2026-11-18.** Temps restant reconfirmé au début de `/iteration 2` : ~20-25 minutes.
 - **Dans le périmètre** : ajouter dans `ressources.ts` les réponses pour « Réseau de médecins », « Le guide diagnostic » et « Groupes de parole » (chacune une ressource ENDOmind plausible, en dur), au lieu du message par défaut actuel.
 - **Hors périmètre** : saisie libre, persona, région, alerte automatique (inchangé, toujours en « À venir »).
 - **Critères d'acceptation** :
@@ -58,7 +58,16 @@
 - **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/ressources.test.ts`.
 - **Tests unitaires prévus** : 1 à 2, un par nouvelle suggestion résolue.
 - **Étapes ajoutées à la démo** : `test.step("Je clique sur chaque suggestion et je vois une ressource dédiée")`.
-- **Bilan** : _à remplir en fin d'itération._
+- **Bilan** :
+  - Durée de codage réelle : 4 minutes (budget 10 min, aucun dépassement).
+  - Critères d'acceptation : les 3 satisfaits — « Réseau de médecins » affiche la carte des filières de soins, « Le guide diagnostic » et « Groupes de parole » affichent chacune leur ressource dédiée, `/health` et `/sante` répondent 200 sur le frontend (8080) et l'api (8081) en local après redéploiement. `$URL_PUBLIQUE/health` et `/sante` restent à confirmer par le développeur dans son navigateur (non vérifiable depuis la machine).
+  - Reporté : rien de nouveau par rapport au plan (saisie libre, persona, région, alerte automatique restent en « À venir »).
+  - Harnais : aucun blocage — `npm test` au vert (7 tests, dont 3 nouveaux et 1 test « inconnue » corrigé pour ne plus confondre avec « medecins » désormais résolu), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 2` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : ajout de 3 réponses dédiées (filières de soins, guide diagnostic, groupes de parole) — sert les 2 premiers critères.
+    - `frontend/src/app/ressources.test.ts` : 3 nouveaux tests Vitest (un par nouvelle suggestion) + correction du test « suggestion inconnue » qui ciblait à tort `"medecins"` — point 2 de la DoD.
+    - `DEPLOIEMENT.md` : section « connu comme fragile » mise à jour (les 4 suggestions ont désormais une vraie ressource).
+    - `e2e/demo.spec.ts` : étape ajoutée couvrant les 3 nouvelles ressources — démonstration du cas passant, hors DoD.
 
 ## À venir
 

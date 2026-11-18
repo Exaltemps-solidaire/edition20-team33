@@ -15,4 +15,15 @@ test("Démo : le cas passant", async ({ page }) => {
     await page.getByRole("button", { name: "Mes droits (ALD, RQTH)" }).click();
     await expect(page.getByText("ALD 31 et endométriose")).toBeVisible();
   });
+
+  await test.step("Je clique sur chaque suggestion et je vois une ressource dédiée", async () => {
+    await page.getByRole("button", { name: "Réseau de médecins" }).click();
+    await expect(page.getByText("Carte des filières de soins par région")).toBeVisible();
+
+    await page.getByRole("button", { name: "Le guide diagnostic" }).click();
+    await expect(page.getByText("Le diagnostic, et maintenant ?")).toBeVisible();
+
+    await page.getByRole("button", { name: "Groupes de parole" }).click();
+    await expect(page.getByText("Groupes de parole et cafés patientes")).toBeVisible();
+  });
 });
