@@ -283,6 +283,28 @@
     - `frontend/src/app/ressources.ts` : réécriture des `intro` de `REPONSE_DROITS`, `REPONSE_MEDECINS`, `REPONSE_GROUPES` en résumés concrets du contenu de la ressource, sur le modèle du guide (itération 7).
     - `frontend/src/app/ressources.test.ts` : 2 tests (résumé droits, résumé groupes).
 
+## Itération 12 : deux bugs signalés — faux lien de redirection, chat qui ne se réinitialise pas au changement de profil
+
+- **Plan validé le 2026-11-18**, bugs signalés directement par le développeur. Temps restant annoncé : moins de 10 minutes.
+- **Dans le périmètre** :
+  - Retirer le `<a href="#">` qui entoure `ressource.lien` (aucune ressource n'a de vraie destination, voir ❗️ ci-dessus) : affichage en texte simple, plus d'affordance de lien cassé.
+  - Réinitialiser `messages`, `texteLibre` et `region` quand on clique sur « Changer de profil », pour ne plus arriver sur la conversation de l'ancien profil.
+- **Hors périmètre** : inventer une vraie destination pour les ressources (aucune n'existe dans la passation), persistance de la conversation par profil.
+- **Critères d'acceptation** :
+  - Étant donné une réponse avec ressource, quand elle s'affiche, alors le texte du lien n'est plus un `<a>` cliquable qui ne mène nulle part.
+  - Étant donné une conversation en cours avec le profil A, quand on clique « Changer de profil » et qu'on choisit le profil B, alors le chat repart de l'intro, sans les messages de la conversation avec A.
+- **Codage estimé** : quelques minutes.
+- **Fichiers prévus** : `frontend/src/app/page.tsx`.
+- **Tests unitaires prévus** : 0 — changements de balisage et de câblage d'état, pas de nouvelle logique métier pure à isoler (cohérent avec la DoD : pas de test sur du balisage pur).
+- **Bilan** :
+  - Durée de codage réelle : 23 secondes.
+  - Critères d'acceptation : les 2 satisfaits — le lien de ressource est un `<span>` texte, plus un `<a href="#">` ; « Changer de profil » réinitialise `messages`, `texteLibre` et `region`.
+  - Reporté : aucune vraie destination pour les ressources (pas de source dans la passation) — signalé ❗️ au développeur avant de coder, reste hors périmètre tant que l'équipe ne fournit pas de vrais liens.
+  - Harnais : aucun blocage — `npm test` au vert (22 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 12` accepté.
+  - **Modifications** :
+    - `frontend/src/app/page.tsx` : `ressource.lien` affiché en `<span>` au lieu d'un `<a href="#">` ; le clic sur « Changer de profil » réinitialise aussi la conversation, le texte en cours et la région.
+    - `frontend/src/app/page.module.css` : règle `.ressourceCard a` renommée `.ressourceLien` (même style visuel, plus de sémantique de lien).
+
 ## À venir
 
 - Questions de relance pour affiner le besoin et challenger la cliente (demande du développeur après l'itération 10) : encore à cadrer avec lui (taille, déclencheur) avant toute itération.

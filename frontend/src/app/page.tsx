@@ -82,7 +82,15 @@ export default function Home() {
             <h1>ENDOMIND</h1>
             <p>Chatbot d&apos;information · Pas d&apos;avis médical</p>
           </div>
-          <button className={styles.changerProfil} onClick={() => setProfilId(null)}>
+          <button
+            className={styles.changerProfil}
+            onClick={() => {
+              setProfilId(null);
+              setMessages([{ type: "bot-intro" }]);
+              setTexteLibre("");
+              setRegion(null);
+            }}
+          >
             Changer de profil
           </button>
         </header>
@@ -119,7 +127,7 @@ export default function Home() {
                     <span>{ressource.label}</span>
                     <strong>{ressource.titre}</strong>
                     <span>{ressource.description}</span>
-                    <a href="#">{ressource.lien}</a>
+                    <span className={styles.ressourceLien}>{ressource.lien}</span>
                   </div>
                 ))}
                 {message.reponse.alerte && (
