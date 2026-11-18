@@ -115,6 +115,25 @@
   padding: 0 16px 14px;
 }
 
+.regionSelect {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--endo-encre);
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+.regionSelect select {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--endo-creme);
+  font-size: 13px;
+}
+
 .suggestionsLabel {
   width: 100%;
   font-size: 12px;

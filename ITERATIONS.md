@@ -148,6 +148,32 @@
     - `frontend/src/app/page.module.css` : style de l'encadré d'alerte.
     - `e2e/demo.spec.ts` : assertion ajoutée sur la présence de l'encadré d'alerte — démonstration du cas passant, hors DoD.
 
+## Itération 6 : La patiente précise sa région, et la réponse sur les filières de soins la mentionne
+
+- **Plan validé le 2026-11-18 (réduit par l'agent, ✂️ voir ci-dessous).** Temps restant annoncé au début de `/iteration 6` : moins de 10 minutes.
+- ✂️ Avec moins de 10 minutes et un cycle publication+déploiement+signal qui a pris 4-5 minutes à chaque itération précédente, je réduis fortement le périmètre par rapport à un vrai sélecteur de filière par région : pas de liste de filières réelles par région (non présente dans la passation), juste un sélecteur de région qui personnalise la réponse « Réseau de médecins » en la mentionnant. Si le temps manque pour terminer et publier, je m'arrête et je reporte le reste.
+- **Dans le périmètre** : un `<select>` de 3-4 régions au-dessus des suggestions ; si une région est choisie, la réponse à « Réseau de médecins » mentionne la région sélectionnée dans son texte.
+- **Hors périmètre** : vraies filières de soins par région (liste à obtenir auprès des cadreurs), personnalisation des 3 autres suggestions, persistance du choix.
+- **Critères d'acceptation** :
+  - Étant donné une région sélectionnée, quand on clique sur « Réseau de médecins », alors la réponse mentionne la région choisie.
+  - Étant donné aucune région sélectionnée, quand on clique sur « Réseau de médecins », alors la réponse reste celle par défaut, sans mention de région.
+- **Hypothèse de l'équipe couverte** : aucune — couverte à l'itération 5.
+- **Codage estimé** : 3-4 minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts` (fonction `personnaliserRegion`), `frontend/src/app/ressources.test.ts`, `frontend/src/app/page.tsx`, `frontend/src/app/page.module.css`.
+- **Tests unitaires prévus** : 1 à 2, sur `personnaliserRegion`.
+- **Étapes ajoutées à la démo** : extension du test existant pour sélectionner une région avant de cliquer sur « Réseau de médecins ».
+- **Bilan** :
+  - Durée de codage réelle : 45 secondes (budget réduit à 3-4 min, aucun dépassement).
+  - Critères d'acceptation : les 2 satisfaits — la réponse « Réseau de médecins » mentionne la région choisie quand une région est sélectionnée, et reste inchangée sinon (couvert par 2 tests Vitest sur `personnaliserRegion`).
+  - Reporté : les vraies filières de soins par région restent hors périmètre, à obtenir auprès des cadreurs si le hackathon continue au-delà de cette itération.
+  - Harnais : aucun blocage — `npm test` au vert (13 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 6` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : ajout de `REGIONS` et de la fonction pure `personnaliserRegion`, qui ajoute la mention de la région à l'intro d'une réponse.
+    - `frontend/src/app/ressources.test.ts` : 2 tests sur `personnaliserRegion` (région choisie, aucune région).
+    - `frontend/src/app/page.tsx` : ajout d'un `<select>` « Votre région » au-dessus des suggestions ; la réponse à « Réseau de médecins » passe par `personnaliserRegion`.
+    - `frontend/src/app/page.module.css` : styles `.regionSelect`.
+    - `e2e/demo.spec.ts` : étape de démo sélectionnant une région avant de cliquer sur « Réseau de médecins », et vérifiant la mention dans la réponse.
+
 ## À venir
 
-1. Sélecteur de région (filière de soins régionale).
+_Rien — toutes les fonctionnalités de la passation sont désormais couvertes au moins a minima après cette itération._

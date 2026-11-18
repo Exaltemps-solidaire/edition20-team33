@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resoudreSuggestion, resoudreTexteLibre } from "./ressources";
+import { personnaliserRegion, resoudreSuggestion, resoudreTexteLibre } from "./ressources";
 
 describe("resoudreSuggestion", () => {
   it("renvoie les ressources ALD et RQTH pour la suggestion droits", () => {
@@ -47,5 +47,18 @@ describe("resoudreTexteLibre", () => {
   it("déclenche l'alerte uniquement quand aucun mot-clé n'est reconnu", () => {
     expect(resoudreTexteLibre("Une question hors sujet").alerte).toBe(true);
     expect(resoudreTexteLibre("Je cherche un spécialiste").alerte).toBeUndefined();
+  });
+});
+
+describe("personnaliserRegion", () => {
+  it("mentionne la région choisie dans l'intro de la réponse", () => {
+    const reponse = personnaliserRegion(resoudreSuggestion("medecins"), "Occitanie");
+    expect(reponse.intro).toContain("Occitanie");
+  });
+
+  it("laisse la réponse inchangée quand aucune région n'est choisie", () => {
+    const originale = resoudreSuggestion("medecins");
+    const reponse = personnaliserRegion(originale, null);
+    expect(reponse.intro).toBe(originale.intro);
   });
 });

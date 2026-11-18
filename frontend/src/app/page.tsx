@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 import styles from "./page.module.css";
 import { PROFILS } from "./profils";
-import { resoudreSuggestion, resoudreTexteLibre, type ReponseSuggestion } from "./ressources";
+import { REGIONS, personnaliserRegion, resoudreSuggestion, resoudreTexteLibre, type ReponseSuggestion } from "./ressources";
 
 type Message =
   | { type: "bot-intro" }
@@ -21,9 +21,10 @@ export default function Home() {
   const [profilId, setProfilId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([{ type: "bot-intro" }]);
   const [texteLibre, setTexteLibre] = useState("");
+  const [region, setRegion] = useState<string | null>(null);
 
   function poserQuestion(id: string, label: string) {
-    const reponse = resoudreSuggestion(id);
+    const reponse = id === "medecins" ? personnaliserRegion(resoudreSuggestion(id), region) : resoudreSuggestion(id);
     setMessages((precedents) => [
       ...precedents,
       { type: "user", texte: label },
@@ -130,6 +131,21 @@ export default function Home() {
         </div>
 
         <div className={styles.suggestions}>
+          <label className={styles.regionSelect}>
+            Votre région
+            <select
+              aria-label="Votre région"
+              value={region ?? ""}
+              onChange={(e) => setRegion(e.target.value || null)}
+            >
+              <option value="">Non précisée</option>
+              {REGIONS.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          </label>
           <span className={styles.suggestionsLabel}>Questions fréquentes</span>
           {SUGGESTIONS.map((suggestion) => (
             <button

@@ -102,3 +102,10 @@ export function resoudreTexteLibre(texte: string): ReponseSuggestion {
   const correspondance = MOTS_CLES.find(({ motCle }) => texteNormalise.includes(motCle));
   return correspondance ? resoudreSuggestion(correspondance.id) : REPONSE_PAR_DEFAUT;
 }
+
+export const REGIONS = ["Île-de-France", "Auvergne-Rhône-Alpes", "Occitanie", "Hauts-de-France"];
+
+export function personnaliserRegion(reponse: ReponseSuggestion, region: string | null): ReponseSuggestion {
+  if (!region) return reponse;
+  return { ...reponse, intro: `${reponse.intro} (région sélectionnée : ${region})` };
+}
