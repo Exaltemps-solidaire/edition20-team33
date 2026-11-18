@@ -25,6 +25,18 @@ describe("resoudreSuggestion", () => {
     expect(reponse.ressources.map((r) => r.titre)).toEqual(["Groupes de parole et cafés patientes"]);
   });
 
+  it("résume le contenu réel des ressources droits, pas une phrase d'accroche générique", () => {
+    const reponse = resoudreSuggestion("droits");
+    expect(reponse.intro).not.toContain("Bonne question");
+    expect(reponse.intro).toContain("ALD");
+    expect(reponse.intro).toContain("RQTH");
+  });
+
+  it("résume le contenu réel des ressources groupes, pas une phrase d'accroche générique", () => {
+    const reponse = resoudreSuggestion("groupes");
+    expect(reponse.intro).toContain("groupes de parole");
+  });
+
   it("renvoie une réponse par défaut sans ressource pour une suggestion inconnue", () => {
     const reponse = resoudreSuggestion("inconnue");
     expect(reponse.ressources).toHaveLength(0);

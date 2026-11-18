@@ -263,6 +263,26 @@
     - `frontend/src/app/ressources.ts` : `distanceLevenshtein` et `motCleApproche`, tolérance aux fautes de frappe selon la longueur du mot-clé, appliquée en complément de la correspondance par sous-chaîne.
     - `frontend/src/app/ressources.test.ts` : 2 tests (faute de frappe tolérée, pas de faux positif).
 
+## Itération 11 : chaque réponse (droits, médecins, groupes) porte un vrai résumé, pas une phrase générique
+
+- **Plan validé le 2026-11-18**, demande directe du développeur : « inclure un petit résumé de la réponse », comme le guide le fait déjà depuis l'itération 7.
+- **Dans le périmètre** : réécrire l'`intro` de `REPONSE_DROITS`, `REPONSE_MEDECINS`, `REPONSE_GROUPES` pour qu'elle résume ce que contient la ressource affichée en dessous (comme `resume` dans `resoudreGuide`), au lieu d'une phrase d'accroche générique.
+- **Hors périmètre** : nouvelle structure de données, nouvelles ressources, questions de relance (demande du développeur toujours en attente de cadrage, reportée après celle-ci).
+- **Critères d'acceptation** :
+  - Étant donné la suggestion « droits », quand on la résout, alors l'intro mentionne concrètement l'ALD et la RQTH (pas « Bonne question... »).
+  - Étant donné la suggestion « groupes », quand on la résout, alors l'intro résume le contenu réel (rencontres/échange entre patientes), pas une phrase d'accroche vide.
+- **Codage estimé** : quelques minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/ressources.test.ts`.
+- **Tests unitaires prévus** : 2, un par critère d'acceptation.
+- **Bilan** :
+  - Durée de codage réelle : 23 secondes.
+  - Critères d'acceptation : les 2 satisfaits — l'intro « droits » mentionne ALD et RQTH (plus « Bonne question... ») ; l'intro « groupes » résume le contenu réel (groupes de parole). L'intro « médecins » a aussi été reformulée dans le même esprit, sans critère dédié (contenu déjà correct, juste précisé).
+  - Reporté : rien.
+  - Harnais : aucun blocage — `npm test` au vert (22 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 11` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : réécriture des `intro` de `REPONSE_DROITS`, `REPONSE_MEDECINS`, `REPONSE_GROUPES` en résumés concrets du contenu de la ressource, sur le modèle du guide (itération 7).
+    - `frontend/src/app/ressources.test.ts` : 2 tests (résumé droits, résumé groupes).
+
 ## À venir
 
-_Rien d'autre après cette itération, sauf retour du développeur._
+- Questions de relance pour affiner le besoin et challenger la cliente (demande du développeur après l'itération 10) : encore à cadrer avec lui (taille, déclencheur) avant toute itération.

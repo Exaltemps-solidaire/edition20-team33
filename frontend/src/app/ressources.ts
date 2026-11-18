@@ -14,7 +14,8 @@ export type ReponseSuggestion = {
 };
 
 const REPONSE_DROITS: ReponseSuggestion = {
-  intro: "Bonne question. ENDOmind a préparé des ressources spécifiques sur vos droits.",
+  intro:
+    "Deux ressources concrètes : l'ALD 31 pour la prise en charge à 100 %, et la RQTH pour les démarches liées au handicap au travail.",
   ressources: [
     {
       label: "📄 Fiche pratique",
@@ -34,7 +35,7 @@ const REPONSE_DROITS: ReponseSuggestion = {
 };
 
 const REPONSE_MEDECINS: ReponseSuggestion = {
-  intro: "ENDOmind recense les filières de soins coordonnées, par région.",
+  intro: "Une carte des médecins et spécialistes formé·es à l'endométriose, organisée région par région.",
   ressources: [
     {
       label: "🗺 Ressource disponible",
@@ -89,7 +90,7 @@ function resoudreGuide(themeGuide?: string): ReponseSuggestion {
 }
 
 const REPONSE_GROUPES: ReponseSuggestion = {
-  intro: "ENDOmind organise des rencontres entre patientes.",
+  intro: "Des groupes de parole et cafés patientes pour échanger avec d'autres femmes qui vivent la même chose.",
   ressources: [
     {
       label: "👥 Ressource",
