@@ -6,8 +6,9 @@ venant d'être diagnostiquée vers la ressource ENDOmind correspondant à sa que
 ## Services
 
 - `frontend/` : Next.js en export statique, servi par nginx (port 80 du conteneur). **Service exposé au public.**
-- `api/` : Node sans dépendance (port 8081). Pas encore appelée par le front à ce stade (itération 1) : le front
-  sert une interface avec des ressources en dur.
+- `api/` : Node sans dépendance (port 8081). Pas encore appelée par le front : toute la logique
+  (choix de profil, résolution des suggestions et du texte libre, alerte, région) est pure et
+  côté front, avec des ressources en dur.
 
 Chacun des deux services répond `GET /health` et `GET /sante` en `200`.
 
@@ -18,12 +19,12 @@ pas d'appel à l'API ni à un service tiers.
 
 ## Connu comme fragile ou inachevé
 
-- Les 4 suggestions renvoient désormais chacune une vraie ressource (ALD/RQTH, filières de soins,
-  guide diagnostic, groupes de parole) ; seule une question tapée en libre renverrait encore le
-  message par défaut, mais la saisie libre n'est pas encore fonctionnelle (voir ci-dessous).
-- La zone de saisie libre est affichée mais désactivée (non fonctionnelle).
-- Pas d'écran « Qui êtes-vous ? » (personas) ni d'alerte automatique à la direction : prévus aux
-  itérations suivantes (voir `ITERATIONS.md`).
+- Un écran « Qui êtes-vous ? » précède le chatbot (3 profils), sans effet sur les réponses à ce stade.
+- Les 4 suggestions et la saisie libre (reconnaissance par mots-clés) renvoient chacune une vraie
+  ressource ENDOmind ; une question non reconnue affiche un message de contact humain et un encadré
+  d'alerte visuelle (l'envoi réel de l'alerte à l'équipe n'est pas implémenté).
+- Un sélecteur de région personnalise la réponse « Réseau de médecins » en la mentionnant, sans
+  liste réelle de filières par région (à obtenir auprès des cadreurs si le hackathon continue).
 
 ## Contact
 
