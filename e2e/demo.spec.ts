@@ -21,6 +21,11 @@ test("Démo : le cas passant", async ({ page }) => {
     await expect(page.getByText("ALD 31 et endométriose")).toBeVisible();
   });
 
+  await test.step("Je déplie le lien d'une ressource et je vois le détail exact", async () => {
+    await page.getByRole("button", { name: "Lire la fiche ALD →" }).click();
+    await expect(page.getByText("protocole de soins")).toBeVisible();
+  });
+
   await test.step("Je choisis ma région puis je clique sur 'Réseau de médecins'", async () => {
     await page.getByLabel("Votre région").selectOption("Occitanie");
     await page.getByRole("button", { name: "Réseau de médecins" }).click();

@@ -331,6 +331,28 @@
     - `frontend/src/app/ressources.test.ts` : 2 tests remplacés, 1 ajouté, pour couvrir les 3 critères.
     - `e2e/demo.spec.ts` : une question hors sujet suivie d'une deuxième avant d'atteindre le contact humain.
 
+## Itération 14 : le lien de ressource se déplie et montre le contenu exact, en place
+
+- **Plan validé le 2026-11-18**, demande directe du développeur après l'itération 12 (qui avait retiré le faux lien `href="#"`, faute de vraie destination externe). Temps restant annoncé : moins de 10 minutes. Comme il n'existe aucun document externe réel dans la passation, le clic déplie le contenu exact dans la carte, au lieu de naviguer vers une page ou une URL.
+- **Dans le périmètre** : chaque ressource a un champ `detail` (contenu complémentaire réel, écrit par nous, pas un placeholder vide) ; le lien redevient cliquable (bouton) et bascule l'affichage de ce détail sous la carte.
+- **Hors périmètre** : page dédiée par ressource, vraie URL externe, persistance de l'état déplié entre les sessions.
+- **Critères d'acceptation** :
+  - Étant donné une carte ressource affichée, quand on clique sur son lien, alors le contenu détaillé de cette ressource apparaît sous la carte.
+  - Étant donné une carte dépliée, quand on reclique sur son lien, alors le détail se replie.
+- **Codage estimé** : quelques minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/page.tsx`, `frontend/src/app/page.module.css`.
+- **Tests unitaires prévus** : 0 — contenu statique et interaction UI, pas de nouvelle logique métier (cohérent avec la DoD : pas de test sur du balisage pur).
+- **Bilan** :
+  - Durée de codage réelle : 68 secondes.
+  - Critères d'acceptation : les 2 satisfaits — le clic sur le lien déplie le détail exact de la ressource sous la carte ; recliquer replie le détail (bouton devient « Replier ↑ »).
+  - Reporté : rien.
+  - Harnais : aucun blocage — `npm test` au vert (23 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 14` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : champ `detail` ajouté au type `Ressource` et à `ExtraitGuide`, et rempli pour les 7 ressources existantes avec un contenu réel et complémentaire (pas un placeholder vide).
+    - `frontend/src/app/page.tsx` : le lien redevient un `<button>` cliquable, état `cartesDepliees` (un `Set` de titres) qui bascule l'affichage du détail sous la carte.
+    - `frontend/src/app/page.module.css` : `.ressourceLien` redevient un bouton stylé comme avant, nouvelle règle `.ressourceDetail`.
+    - `e2e/demo.spec.ts` : une étape qui déplie le lien ALD et vérifie le détail affiché.
+
 ## À venir
 
 _Rien d'autre après cette itération, sauf retour du développeur._

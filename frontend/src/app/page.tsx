@@ -23,6 +23,16 @@ export default function Home() {
   const [texteLibre, setTexteLibre] = useState("");
   const [region, setRegion] = useState<string | null>(null);
   const [enAttenteClarification, setEnAttenteClarification] = useState(false);
+  const [cartesDepliees, setCartesDepliees] = useState<Set<string>>(new Set());
+
+  function basculerDetail(titre: string) {
+    setCartesDepliees((precedent) => {
+      const suivant = new Set(precedent);
+      if (suivant.has(titre)) suivant.delete(titre);
+      else suivant.add(titre);
+      return suivant;
+    });
+  }
 
   function poserQuestion(id: string, label: string) {
     const reponse = id === "medecins" ? personnaliserRegion(resoudreSuggestion(id), region) : resoudreSuggestion(id);
@@ -131,7 +141,16 @@ export default function Home() {
                     <span>{ressource.label}</span>
                     <strong>{ressource.titre}</strong>
                     <span>{ressource.description}</span>
-                    <span className={styles.ressourceLien}>{ressource.lien}</span>
+                    <button
+                      type="button"
+                      className={styles.ressourceLien}
+                      onClick={() => basculerDetail(ressource.titre)}
+                    >
+                      {cartesDepliees.has(ressource.titre) ? "Replier ↑" : ressource.lien}
+                    </button>
+                    {cartesDepliees.has(ressource.titre) && (
+                      <p className={styles.ressourceDetail}>{ressource.detail}</p>
+                    )}
                   </div>
                 ))}
                 {message.reponse.alerte && (

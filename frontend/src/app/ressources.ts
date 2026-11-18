@@ -5,6 +5,7 @@ export type Ressource = {
   titre: string;
   description: string;
   lien: string;
+  detail: string;
 };
 
 export type ReponseSuggestion = {
@@ -22,14 +23,18 @@ const REPONSE_DROITS: ReponseSuggestion = {
       titre: "ALD 31 et endométriose",
       description:
         "Ce qu'est l'ALD 31 (affection de longue durée, prise en charge à 100 %), comment la demander, pourquoi elle est parfois refusée.",
-      lien: "Télécharger la fiche ALD →",
+      lien: "Lire la fiche ALD →",
+      detail:
+        "Démarche : votre médecin traitant remplit le protocole de soins, transmis à l'Assurance Maladie. Un refus initial se conteste par recours amiable.",
     },
     {
       label: "📘 Livret",
       titre: "Endo&Vie pro — RQTH et MDPH",
       description:
         "Reconnaissance de la qualité de travailleur handicapé, maison départementale des personnes handicapées : démarches pas à pas.",
-      lien: "Voir le livret →",
+      lien: "Lire le livret →",
+      detail:
+        "La demande se dépose à la MDPH de votre département ; elle ouvre droit à des aménagements de poste et à des aides à l'emploi.",
     },
   ],
 };
@@ -43,6 +48,8 @@ const REPONSE_MEDECINS: ReponseSuggestion = {
       description:
         "Des réseaux de professionnel·les formé·es à l'endométriose, organisés par région.",
       lien: "Voir la carte des filières →",
+      detail:
+        "Chaque réseau indique les coordonnées des professionnel·les, leurs spécialités et leurs délais de rendez-vous.",
     },
   ],
 };
@@ -51,12 +58,14 @@ type ExtraitGuide = {
   theme: string;
   resume: string;
   extrait: string;
+  detail: string;
 };
 
 const EXTRAIT_GUIDE_PAR_DEFAUT: ExtraitGuide = {
   theme: "Le diagnostic, et maintenant ?",
   resume: "ENDOmind a publié un guide complet pour cette étape.",
   extrait: "Guide gratuit de 80 pages : repères pour comprendre son diagnostic et les premières étapes.",
+  detail: "Sommaire : comprendre le diagnostic, en parler à son entourage, les premiers rendez-vous à prévoir.",
 };
 
 const EXTRAITS_GUIDE: Record<string, ExtraitGuide> = {
@@ -65,12 +74,15 @@ const EXTRAITS_GUIDE: Record<string, ExtraitGuide> = {
     resume: "Ce que vous ressentez est normal : le guide consacre un chapitre aux premiers jours.",
     extrait:
       "« On a longtemps cherché un nom à mes douleurs. Le jour du diagnostic, on se sent à la fois soulagée et perdue. » — extrait du guide.",
+    detail:
+      "La suite du chapitre aborde comment en parler au travail et aux proches, sans se sentir obligée de tout expliquer tout de suite.",
   },
   traitement: {
     theme: "Comprendre les traitements",
     resume: "Le guide détaille les grandes familles de traitements et comment en parler à son médecin.",
     extrait:
       "« Il n'existe pas un traitement unique : hormonal, chirurgical, ou les deux combinés, selon votre situation. » — extrait du guide.",
+    detail: "Le guide liste aussi les questions à poser à son médecin avant de choisir une option de traitement.",
   },
 };
 
@@ -84,6 +96,7 @@ function resoudreGuide(themeGuide?: string): ReponseSuggestion {
         titre: extrait.theme,
         description: extrait.extrait,
         lien: "Lire ce passage dans le guide →",
+        detail: extrait.detail,
       },
     ],
   };
@@ -97,6 +110,8 @@ const REPONSE_GROUPES: ReponseSuggestion = {
       titre: "Groupes de parole et cafés patientes",
       description: "Des rencontres pour échanger avec d'autres patientes près de chez vous.",
       lien: "En savoir plus →",
+      detail:
+        "Les rencontres ont lieu en ligne et en présentiel selon les villes ; inscription libre et gratuite auprès d'ENDOmind.",
     },
   ],
 };
