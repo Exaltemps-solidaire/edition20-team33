@@ -200,6 +200,29 @@
     - `frontend/src/app/ressources.test.ts` : 3 tests sur les extraits thématiques et la vue d'ensemble par défaut.
     - `e2e/demo.spec.ts` : étape tapant « diagnostic » et vérifiant l'extrait affiché.
 
+## Itération 8 : La saisie libre reconnaît des formulations réalistes, pas seulement un mot-clé exact par ressource
+
+- **Plan validé le 2026-11-18** (confirmé en conversation, pas d'objection sur la portée proposée). Temps restant annoncé au début de `/iteration 8` : le développeur a dit « prends ton temps » — pas de pression immédiate, mais je garde le plafond de 10 minutes de codage et je redemande si je l'approche.
+- Demande du développeur, précisée en échange : « d'habitude, une question posée obtient une réponse vague ou aucune réponse (alerte envoyée) » — la liste de mots-clés est trop étroite, la plupart des formulations réalistes ne matchent rien.
+- **Dans le périmètre** : élargir `MOTS_CLES` pour les 4 catégories (droits, médecins, guide, groupes) avec des synonymes et formulations courantes, toujours en correspondance simple (sous-chaîne), fonction pure testée.
+- **Hors périmètre** : recherche floue/NLP, seuil de confiance, vrai contenu du guide (toujours fictif).
+- **Critères d'acceptation** :
+  - Étant donné une formulation courante par catégorie (ex. « arrêt de travail », « gynécologue », « opération », « témoignage »), quand elle est tapée en libre, alors la ressource de la bonne catégorie s'affiche (pas la réponse par défaut).
+  - Étant donné une question hors sujet, quand elle est tapée, alors la réponse par défaut + alerte s'affichent toujours (comportement inchangé).
+- **Hypothèse de l'équipe couverte** : contribue indirectement à réduire le taux de réponses par défaut/alerte sur des questions qui ont une vraie ressource.
+- **Codage estimé** : pas de minutage serré demandé par le développeur ; je vise quand même sous les 10 minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/ressources.test.ts`.
+- **Tests unitaires prévus** : 3, un par nouvelle formulation représentative d'une catégorie.
+- **Étapes ajoutées à la démo** : aucune nouvelle (la démo teste déjà plusieurs formulations ; les nouvelles entrent dans la même logique).
+- **Bilan** :
+  - Durée de codage réelle : 41 secondes.
+  - Critères d'acceptation : les 2 satisfaits — « arrêt de travail », « gynécologue », « témoignage » routent désormais vers leur bonne catégorie (3 nouveaux tests), et une question hors sujet déclenche toujours la réponse par défaut + alerte (comportement inchangé, test existant).
+  - Reporté : recherche floue/NLP et vrai contenu du guide restent hors périmètre, pas d'itération suivante prévue sauf retour du développeur.
+  - Harnais : aucun blocage — `npm test` au vert (17 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 8` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : `MOTS_CLES` élargi avec des synonymes et formulations courantes pour les 4 catégories (droits, médecins, guide/diagnostic, guide/traitement, groupes).
+    - `frontend/src/app/ressources.test.ts` : 1 test regroupant 3 formulations réalistes vérifiant le bon routage.
+
 ## À venir
 
-_Rien d'autre — étendre les extraits thématiques aux autres ressources si le temps le permet après cette itération._
+_Rien d'autre après cette itération, sauf retour du développeur._

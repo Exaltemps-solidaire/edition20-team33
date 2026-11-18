@@ -116,16 +116,48 @@ export function resoudreSuggestion(id: string, themeGuide?: string): ReponseSugg
 }
 
 const MOTS_CLES: { motCle: string; id: string; themeGuide?: string }[] = [
+  // Droits : ALD, RQTH, démarches administratives
   { motCle: "ald", id: "droits" },
   { motCle: "rqth", id: "droits" },
   { motCle: "droit", id: "droits" },
+  { motCle: "congé", id: "droits" },
+  { motCle: "arrêt de travail", id: "droits" },
+  { motCle: "invalidité", id: "droits" },
+  { motCle: "handicap", id: "droits" },
+  { motCle: "allocation", id: "droits" },
+  { motCle: "pension", id: "droits" },
+
+  // Médecins : trouver un professionnel de santé formé
   { motCle: "médecin", id: "medecins" },
   { motCle: "spécialiste", id: "medecins" },
+  { motCle: "gynécologue", id: "medecins" },
+  { motCle: "chirurgien", id: "medecins" },
+  { motCle: "consultation", id: "medecins" },
+  { motCle: "rendez-vous", id: "medecins" },
+  { motCle: "rdv", id: "medecins" },
+
+  // Guide : thème « diagnostic »
   { motCle: "diagnostic", id: "guide", themeGuide: "diagnostic" },
+  { motCle: "diagnostiqu", id: "guide", themeGuide: "diagnostic" },
+  { motCle: "annonce", id: "guide", themeGuide: "diagnostic" },
+  { motCle: "symptôme", id: "guide", themeGuide: "diagnostic" },
+
+  // Guide : thème « traitement »
   { motCle: "traitement", id: "guide", themeGuide: "traitement" },
+  { motCle: "opération", id: "guide", themeGuide: "traitement" },
+  { motCle: "chirurgie", id: "guide", themeGuide: "traitement" },
+  { motCle: "hormone", id: "guide", themeGuide: "traitement" },
+
+  // Guide : vue d'ensemble
   { motCle: "guide", id: "guide" },
+
+  // Groupes de parole : échanger avec d'autres patientes
   { motCle: "groupe", id: "groupes" },
   { motCle: "parole", id: "groupes" },
+  { motCle: "soutien", id: "groupes" },
+  { motCle: "échanger", id: "groupes" },
+  { motCle: "témoignage", id: "groupes" },
+  { motCle: "rencontre", id: "groupes" },
 ];
 
 export function resoudreTexteLibre(texte: string): ReponseSuggestion {

@@ -64,6 +64,18 @@ describe("resoudreTexteLibre", () => {
     expect(resoudreTexteLibre("Une question hors sujet").alerte).toBe(true);
     expect(resoudreTexteLibre("Je cherche un spécialiste").alerte).toBeUndefined();
   });
+
+  it("reconnaît des formulations réalistes au-delà des mots-clés exacts d'origine", () => {
+    expect(resoudreTexteLibre("Je suis en arrêt de travail, quels sont mes droits ?").ressources.map((r) => r.titre)).toContain(
+      "ALD 31 et endométriose",
+    );
+    expect(resoudreTexteLibre("Je cherche une gynécologue près de chez moi").ressources.map((r) => r.titre)).toEqual([
+      "Carte des filières de soins par région",
+    ]);
+    expect(resoudreTexteLibre("J'aimerais lire des témoignages d'autres patientes").ressources.map((r) => r.titre)).toEqual([
+      "Groupes de parole et cafés patientes",
+    ]);
+  });
 });
 
 describe("personnaliserRegion", () => {
