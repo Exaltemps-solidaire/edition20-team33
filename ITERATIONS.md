@@ -174,6 +174,32 @@
     - `frontend/src/app/page.module.css` : styles `.regionSelect`.
     - `e2e/demo.spec.ts` : étape de démo sélectionnant une région avant de cliquer sur « Réseau de médecins », et vérifiant la mention dans la réponse.
 
+## Itération 7 : La réponse sur le guide montre d'abord un résumé puis l'extrait du thème concerné, pas la description générique du guide entier
+
+- **Plan validé le 2026-11-18.** Temps restant annoncé au début de `/iteration 7` : 5 à 10 minutes.
+- Demande du développeur en cours de hackathon, taillée ici en itération : « des réponses plus pertinentes » quand on pose une question — amorcée sur le guide, qui est le cas le plus flagrant (une seule description générique pour tout le guide de 80 pages, quel que soit le mot-clé).
+- ❓ **Levé** : la passation ne contient pas le vrai texte du guide, seulement son titre et sa description générale. Choix validé par le développeur : fabriquer 2-3 courts extraits fictifs par thème, en données en dur, comme le reste du contenu — à remplacer par le vrai texte du guide si l'association le fournit.
+- **Dans le périmètre** : pour les mots-clés liés au guide reconnus en saisie libre (« diagnostic », « traitement »), la réponse affiche un résumé court puis un extrait du thème concerné, au lieu de la description générique des 80 pages. La suggestion « Le guide diagnostic » (clic direct, sans mot-clé) continue de montrer la vue d'ensemble du guide.
+- **Hors périmètre** : vrai contenu du guide, extraits thématiques pour les autres ressources (droits, médecins, groupes) — à reprendre dans une itération suivante si le temps le permet.
+- **Critères d'acceptation** :
+  - Étant donné le mot « diagnostic » tapé en libre, quand la réponse s'affiche, alors elle montre un résumé suivi d'un extrait sur « les premiers jours après le diagnostic », pas la description générique du guide.
+  - Étant donné le mot « traitement » tapé en libre, quand la réponse s'affiche, alors elle montre l'extrait sur « comprendre les traitements ».
+  - Étant donné un clic sur la suggestion « Le guide diagnostic », quand la réponse s'affiche, alors elle reste la vue d'ensemble du guide (comportement inchangé).
+- **Hypothèse de l'équipe couverte** : aucune directement — contribue à la pertinence perçue des réponses, en lien avec l'enjeu « 55 % des patientes ne se sentent pas assez informées après le diagnostic ».
+- **Codage estimé** : 3-4 minutes.
+- **Fichiers prévus** : `frontend/src/app/ressources.ts`, `frontend/src/app/ressources.test.ts`.
+- **Tests unitaires prévus** : 2 à 3, sur la fonction de résolution du thème du guide.
+- **Étapes ajoutées à la démo** : une étape tapant « diagnostic » en saisie libre et vérifiant l'extrait thématique.
+- **Bilan** :
+  - Durée de codage réelle : 63 secondes (budget 3-4 min, aucun dépassement).
+  - Critères d'acceptation : les 3 satisfaits — « diagnostic » et « traitement » montrent chacun leur extrait thématique (résumé + citation), la suggestion « Le guide diagnostic » garde la vue d'ensemble inchangée. Couvert par 3 nouveaux tests Vitest.
+  - Reporté : vrai texte du guide (extraits actuels fictifs, à remplacer si l'association le fournit) et extraits thématiques pour les autres ressources — aucune itération suivante prévue faute de temps.
+  - Harnais : aucun blocage — `npm test` au vert (16 tests frontend, 2 tests racine), `./scripts/verifier-deployabilite.sh` sans borne, `signaler-version.sh 7` accepté.
+  - **Modifications** :
+    - `frontend/src/app/ressources.ts` : `resoudreGuide` remplace la réponse guide statique ; résumé + extrait selon le thème (`diagnostic`, `traitement`), vue d'ensemble par défaut sinon ; `resoudreTexteLibre` transmet le thème détecté.
+    - `frontend/src/app/ressources.test.ts` : 3 tests sur les extraits thématiques et la vue d'ensemble par défaut.
+    - `e2e/demo.spec.ts` : étape tapant « diagnostic » et vérifiant l'extrait affiché.
+
 ## À venir
 
-_Rien — toutes les fonctionnalités de la passation sont désormais couvertes au moins a minima après cette itération._
+_Rien d'autre — étendre les extraits thématiques aux autres ressources si le temps le permet après cette itération._

@@ -38,6 +38,22 @@ describe("resoudreTexteLibre", () => {
     expect(reponse.ressources.map((r) => r.titre)).toEqual(["Carte des filières de soins par région"]);
   });
 
+  it("montre l'extrait thématique du guide pour le mot-clé diagnostic, pas la description générique", () => {
+    const reponse = resoudreTexteLibre("Je viens d'avoir mon diagnostic");
+    expect(reponse.ressources[0].titre).toBe("Les premiers jours après le diagnostic");
+    expect(reponse.ressources[0].description).not.toContain("80 pages");
+  });
+
+  it("montre l'extrait thématique du guide pour le mot-clé traitement", () => {
+    const reponse = resoudreTexteLibre("Quel traitement me conseillez-vous");
+    expect(reponse.ressources[0].titre).toBe("Comprendre les traitements");
+  });
+
+  it("garde la vue d'ensemble du guide quand la suggestion est cliquée sans mot-clé", () => {
+    const reponse = resoudreSuggestion("guide");
+    expect(reponse.ressources[0].titre).toBe("Le diagnostic, et maintenant ?");
+  });
+
   it("renvoie le contact humain quand aucun mot-clé n'est reconnu", () => {
     const reponse = resoudreTexteLibre("Bonjour, j'ai une question sur autre chose");
     expect(reponse.ressources).toHaveLength(0);

@@ -37,6 +37,12 @@ test("Démo : le cas passant", async ({ page }) => {
     await expect(page.getByText("Groupes de parole et cafés patientes")).toBeVisible();
   });
 
+  await test.step("Je tape 'diagnostic' et j'obtiens l'extrait thématique du guide, pas la description générique", async () => {
+    await page.getByLabel("Votre question").fill("Je viens d'avoir mon diagnostic");
+    await page.getByRole("button", { name: "Envoyer" }).click();
+    await expect(page.getByText("Les premiers jours après le diagnostic")).toBeVisible();
+  });
+
   await test.step("Je tape une question et j'obtiens une ressource ou le contact humain", async () => {
     await page.getByLabel("Votre question").fill("Je cherche un spécialiste");
     await page.getByRole("button", { name: "Envoyer" }).click();
